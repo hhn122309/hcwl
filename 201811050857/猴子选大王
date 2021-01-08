@@ -1,0 +1,147 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define MAXSIZE 100
+typedef struct Node
+{
+int data;//存储猴子编号
+struct Node *next;
+}
+*List;
+/* 用链表来得出大王的序号 */
+int LinkedList(int num_monkey,int number);
+/* 用顺序表来得出大王的序号 */
+int SequenceList(int num_monkey,int number);
+/* 创建循环单链表 */
+List CreateList(int n);
+void main()
+{
+int m,n,way,king;
+printf("请输入猴子个数:");
+scanf("%d",&n);
+printf("请输入要报的数:");
+scanf("%d",&m);
+while (1)
+{
+printf("\n请选择解决问题的方法:\n");
+printf("1.单链表\n");
+printf("2.顺序表\n");
+scanf("%d",&way);
+if (way == 1)
+{
+king = LinkedList(n,m);
+break;
+}
+else if (way == 2)
+{
+king = SequenceList(n,m);
+break;
+}
+else
+{
+printf("输入不合法!\n");
+}
+}
+printf("%d号猴子是大王\n",king);
+}
+/* 创建循环单链表 */
+List CreateList(int n)
+{
+int i;
+List head,p;
+head = (List)malloc(sizeof(struct Node));
+head->next = head;
+for (i = 1; i < n; ++i)
+{
+p = (List)malloc(sizeof(struct Node));
+p->next = head->next;
+head->next = p;
+}
+p = head;
+for (i = 0; i < n; ++i)
+{
+p->data = i+1;
+p = p->next;
+}
+return head;
+}
+/* 用链表来得出大王的序号 */
+int LinkedList(int num_monkey,int number)
+{
+int i,j;
+List head = CreateList(num_monkey);
+List tail = head;//用来存储最后一个节点的地址
+List out,p;//out指向要淘汰的节点,p指向其前一个节点
+/* 让tail指向最后一个节点 */
+for (i = 1; i < num_monkey; i++)
+{
+tail = tail->next;
+}
+/* 淘汰的猴子个数比总个数少1,报数一轮就淘汰一个猴子,所以需要报数的轮数比
+猴子总个数少1*/
+for( i = 1; i < num_monkey; i++ )
+{
+p = tail;
+/* 让p指向要淘汰的猴子的前一个 */
+for ( j = 1; j < number; j++ )
+{
+p = p->next;
+}
+out = p->next;
+/* 如果最后一个猴子被淘汰就更新尾节点 */
+if (out == tail)
+{
+tail = p;
+}
+p->next = out->next;
+printf("猴子%d淘汰\n",out->data);
+free(out);//删除被淘汰猴子的节点
+}
+return p->data;
+}
+/* 用顺序表来得出大王的序号 */
+int SequenceList(int num_monkey,int number)
+{
+/* 用来表示个猴子的信息,如果猴子出局就存储0,否则存储1.第一个元素不使用 */
+int monkey[MAXSIZE];
+/* 用来表示出局的猴子的序号 */
+int out = 1;
+/* 用来表示当前猴子的个数 */
+int num_now = num_monkey;
+int i,j;
+for (i = 0; i < num_monkey+1; i++)
+{ /* 开始将每个元素置1 */
+monkey[i] = 1;
+}
+/* 报数次数比猴子个数少一 */
+for (i = 1; i < num_monkey; i++)
+{
+out = 1;
+/* 报数整个过程 */
+for (j = 0; j < number; j++)
+{
+/* 如果序号数大于猴子个数,表示循环了一圈,那么去掉那个圈数 */
+if (out > num_monkey)
+out -= num_monkey;
+/* 之前已经出局的猴子不参加报数 */
+while(monkey[out] == 0)
+{
+out ++;
+/* 如果序号数大于猴子个数,表示循环了一圈,那么去掉那个圈数 */
+if (out > num_monkey)
+out -= num_monkey;
+}
+out++;
+}
+out--;//报完数后out应该是被淘汰的猴子的下一个,所以要向前移动
+monkey[out] = 0;
+printf("猴子%d淘汰\n",out);
+}
+while(monkey[out] == 0)
+{
+out ++;
+/* 如果序号数大于猴子个数,表示循环了一圈,那么去掉那个圈数 */
+if (out > num_monkey)
+out -= num_monkey;
+}
+return out;
+}
