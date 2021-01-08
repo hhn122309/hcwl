@@ -1,0 +1,55 @@
+#include <stdio.h>
+int fun(int a,int b)
+{
+int c;
+c=10*(b%10)+(a/10)+1000*(b/10)+100*(a%10);
+return c;
+}
+int main() 
+{
+int a;
+int b;
+printf("请输入第一个两位数a:");
+scanf("%d",&a);
+printf("请输入第二个两位数b:");
+scanf("%d",&b);
+int c=fun(a,b);
+printf("结果为:%d",c);
+return 0;
+}
+第二种：引用参数
+#include "stdio.h"
+int fun(int a,int b)
+{
+int s1,g1,s2,g2,c;
+g1=a%10;
+g2=b%10;
+s1=a/10;
+s2=b/10;
+c=s1*1000+s2*100+g1*10+g2;
+return c;
+}
+void main()
+{
+int a,b,c;
+scanf("%d%d",&a,&b);
+c=fun(a,b);
+printf("%d",c);
+}
+第三种：指针型
+{
+*c=y/10+x/10*10+y%10*100+x%10*1000;
+}
+
+int main()                            //主函数
+{
+int a,b,c1,c3;
+cout<<"请输入两个两位整数a,b"<<endl;
+    cin>>a>>b;
+c1=fun1(a,b);                      //调用函数1
+cout<<"值传参合并之后的值：  "<<c1<<endl;
+fun2(a,b);    //调用函数2
+fun3(a,b,&c3);    //调用函数3
+cout<<"指针传参合并之后的值："<<c3<<endl;
+return 0;
+}
