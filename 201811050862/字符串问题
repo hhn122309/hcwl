@@ -1,0 +1,69 @@
+#include<iostream>
+using namespace std;
+
+int main()
+{
+     //a[M][N]
+   int l,c,N,M;
+   cin>>N>>M;
+   char a[50][50];
+   for(int i=0;i<M;i++)
+   {
+	   for(int j=0;j<N;j++)
+	   {
+		   cin>>a[i][j];
+	   
+	   }
+   }
+   
+   cin>>c;
+   while(c--)
+   {
+	   for(int x=0;x<M;x++)
+	   {
+		   for(int y=0;y<N;y++)
+		   {
+			   if(a[x][y]=='X')
+			   {
+                   if(x>=1&&(!(a[x-1][y]=='P')))     //第二行到最后一行，上方
+				   {
+					   a[x-1][y]='W';
+				   }
+				   if(y>=1&&(!(a[x][y-1]=='P')))     //第二列到最后一列，左方
+				   {
+					   a[x][y-1]='W';
+				   }
+				   if(x<=M-2&&(!(a[x+1][y]=='P')))   //第一行到倒数第二行，下方
+				   {
+					   a[x+1][y]='W';
+				   }
+				   if(y<=N-2&&(!(a[x][y+1]=='P')))   //第一列到倒数第二列，右方
+				   {
+					   a[x][y+1]='W';
+				   }
+			   }
+		   }
+	   }
+	   for(int i1=0;i1<M;i1++)
+	   {
+		   for(int j1=0;j1<N;j1++)
+		   {
+			   if(a[i1][j1]=='W')
+				   a[i1][j1]='X';
+		   }
+	   }
+   }
+
+
+   for(int b=0;b<M;b++)
+   {
+	   for(int d=0;d<N;d++)
+	   {
+		   cout<<a[b][d];
+	   
+	   }
+	   cout<<endl;
+   }
+
+   return 0;
+}
