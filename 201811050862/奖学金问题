@@ -1,0 +1,75 @@
+#include <iostream>
+using namespace std;
+
+struct Student 
+{
+	long sno;
+	float  yw;
+	float  sx;
+	float  yy;
+	float totol;
+};
+
+void input(Student a[],int N);
+void count(Student a[],int N);
+void sort(Student a[],int N);
+void output(const Student a[],int N);
+
+void main()
+{	
+	int N;
+	struct Student stu[50];
+	cout<<"请输入参评学生人数n及学生成绩"<<endl;
+    cin>>N;
+    input(stu,N);
+	count(stu,N);
+	sort(stu,N);
+	output(stu,N);
+}
+
+void input(Student a[],int N)
+{
+	for(int i=0;i<N;i++)
+	{
+	a[i].sno=i+1; 
+	cin>>a[i].yw>>a[i].sx>>a[i].yy; 
+	}
+}
+
+void count(Student a[],int N)
+{
+	for(int j=0;j<N;j++)
+	{
+		a[j].totol=a[j].yw+a[j].sx+a[j].yy;
+	}
+	cout<<"学生成绩运算成功!"<<endl<<endl;
+}
+
+void sort(Student a[],int N)                 //冒泡法排序
+{
+	int i,temp1,temp2;
+	for(i=0;i<N-1;i++)
+		for(int k=0;k<N-1-i;k++)
+		{
+			if(a[k].totol>a[k+1].totol) 
+			{
+				temp1=a[k].totol;a[k].totol =a[k+1].totol ;a[k+1].totol =temp1; 
+				temp2=a[k].sno; a[k].sno=a[k+1].sno; a[k+1].sno=temp2; 
+			}
+		    if(a[k].totol==a[k+1].totol && a[k].yw>=a[k+1].yw )  //总成绩相同
+			{
+				   //比较语文成绩，语文成绩好的排在前
+				temp1=a[k].totol;a[k].totol =a[k+1].totol ;a[k+1].totol =temp1; 
+				temp2=a[k].sno; a[k].sno=a[k+1].sno; a[k+1].sno=temp2; 
+			}
+
+		}
+}
+
+void output(const Student a[],int N)
+{
+	for(int w=N-1;w>N-6;w--)
+	{
+		cout<<a[w].sno<<"  "<<a[w].totol<<endl;
+	}
+}
