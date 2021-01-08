@@ -1,0 +1,78 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int N=1e6+5;
+char s[N];
+bool judge(char c)
+{        //判断是不是数字
+	return c>='0'&&c<='9';
+}
+struct node
+{
+	char c;
+	int num;
+	node* left;
+	node* right;
+};
+typedef node* tree;
+tree build(int l,int r)
+{          //建树
+	tree p=new node;
+	p->c='#';
+	p->left=NULL;
+	p->right=NULL;
+	int a=0;
+	int i;
+	bool flag=false;
+	while(l<r&&s[l]=='('&&s[r]==')') l++,r--;//略去无意义括号
+	vector<int> v;//存储*/符号下标
+	for(i=l;i<=r;i++){
+		if(!judge(s[i])&&s[i]!='('&&s[i]!=')'&&a==0)
+		{  //括号外是符号且不是括号
+			if(s[i]=='+'||s[i]=='-')
+			{      //是+或-，则以它为父节点，建左右子树
+				flag=true;
+				p->c=s[i];
+				p->left=build(l,i-1);
+				p->right=build(i+1,r);
+				break;
+			}
+			else
+			{
+				v.push_back(i); //存储*/下标
+			}	
+		}
+		else if(s[i]=='(') a++;
+		else if(s[i]==')') a--;
+	}	
+	if(!flag&&v.size()>0){ //括号外没有+-，则以最后一个符号为父节点
+	    int m=v.size()-1;  
+		p->c=s[v[m]];
+		p->left=build(l,v[m]-1);
+		p->right=build(v[m]+1,r);
+	}
+	if(l==r) 
+	{     //如果l==r,说明是一个数
+	   p->c=s[l];
+	   p->num=s[l]-'0';
+	};
+	return p;
+}
+int js(tree t){   //计算
+	if(t->left!=NULL&&t->right!=NULL){    //左右子树都不为空，说明该节点是个符号，需要运算
+		if(t->c=='*') t->num=js(t->left)*js(t->right);
+		else if(t->c=='/') t->num=js(t->left)/js(t->right);
+		else if(t->c=='+') t->num=js(t->left)+js(t->right);
+		else if(t->c=='-') t->num=js(t->left)-js(t->right);
+	}
+    return t->num;//返回节点的值
+}
+int main(){
+	while(~scanf("%s",s)){
+		if(s[0]=='=') break;
+		int len=strlen(s);
+		int l=0,r=len-2; 
+	    tree T=build(l,r);
+	    int t=js(T);
+	    cout<<t<<endl;
+	}
+}
