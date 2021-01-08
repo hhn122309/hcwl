@@ -1,0 +1,141 @@
+#include<iostream>
+#include<stdlib.h>
+using namespace std;
+/**
+* 操作栈的相关定义 
+*/
+typedef struct 
+{
+	char *elem;
+	int top;
+	int size;
+ }Sqstack;
+ //定义操作符栈和操作数栈 
+ Sqstack Ope;
+ Sqstack Num;
+ 
+ void Initstack(Sqstack *s) //初始化栈 
+ { 
+    s->size=50;
+    s->top=0;  
+    s->elem=(char*)malloc(s->size*sizeof(char));
+    if(!s->elem)  
+        cout<<"OVERFLOW";
+ }
+ 
+ void Push(Sqstack *s,char e)  //入栈
+ {
+ 	 if(s->top>=s->size)//栈内存不够时
+	 {
+	 	char *newelem;
+	 	int increment=50;
+	 	newelem=(char*)realloc(s->elem,(s->size+increment)*sizeof(char));
+	 	s->elem=newelem;
+	 	s->size=s->size+increment;
+	  } 
+	 s->elem[s->top]=e;
+	 s->top++; 
+ }
+ 
+void Pop(Sqstack *s)//出栈 
+{
+   s->top--;
+}
+ 
+char GetTop(Sqstack *s)//取栈顶元素
+{
+	char e;
+	s->top--;
+	e=s->elem[s->top];
+	
+	return e;
+}
+void calculate(Sqstack *ope,Sqstack *num)
+{  
+  
+    char num1,num2,op; 
+    num2=GetTop(num);  
+    num1=GetTop(num);  
+    op=GetTop(ope);
+    int tmpResult=0;  
+    switch(op)
+	{  
+        case '+':  
+            tmpResult=num1+num2;            
+            break;  
+        case '-':  
+            tmpResult=num1-num2;  
+            break;  
+        case '*':  
+            tmpResult=num1*num2;  
+            break;  
+        case '/':  
+            tmpResult=num1/num2;  
+            break;  
+    }  
+    Push(num,tmpResult);//入栈   
+}   
+void dealExpression()
+{   
+    Initstack(&Ope);
+    Initstack(&Num);
+    cout<<"请输入多项式(以#号结束)："<<endl;  
+    char onechar; //单个字符 
+    cin>>onechar;  
+    while(onechar!='#')
+	{  
+        switch(onechar)
+		{  
+            case '+':  
+            case '-':  
+                if(Ope.top&&Ope.elem[Ope.top-1]!='(')
+				{  
+                    calculate(&Ope,&Num);  
+                }  
+                Push(&Ope,onechar); //入栈 
+                cin>>onechar;  
+                break;  
+            case '*':  
+            case '/':  
+                if(Ope.top&&(Ope.elem[Ope.top-1]=='*'||Ope.elem[Ope.top-1]=='/'))
+				{  
+                    calculate(&Ope,&Num);  
+                }  
+				Push(&Ope,onechar); //入栈 
+                cin>>onechar;  
+                break;  
+            case '(':  
+                Push(&Ope,onechar); //入栈 
+                cin>>onechar;  
+                break;  
+            case ')':  
+                while(Ope.elem[Ope.top-1]!='(')//当前是')'，则Ope栈一定能有'('匹配到,即Ope栈一定不为空 
+				{                                  
+                    calculate(&Ope,&Num);  
+                }  
+                Pop(&Ope);//出栈，弹出左括号  
+                cin>>onechar; 
+                break;  
+            default://onechar为数字，则入num栈  
+                char opNum=0;  
+                do{  
+                    opNum=opNum*10+onechar-'0';  
+                    cin>>onechar; 
+                }while(onechar>='0' && onechar<='9');  
+                Push(&Num,opNum); 
+                break;  
+        }//end switch  
+    }//end while  
+    while(Ope.top)
+	{  
+        calculate(&Ope,&Num);  
+    }  
+    int result;
+	result=Num.elem[Num.top-1];  
+    cout<<"计算结果是"<<result<<endl;  
+}  
+int main()
+{  
+    dealExpression();
+	return 0;  
+}  
