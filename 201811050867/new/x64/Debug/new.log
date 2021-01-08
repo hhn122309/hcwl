@@ -1,0 +1,7 @@
+﻿  HHT.cpp
+  new.cpp
+c:\users\12230\documents\vsc++\new\new\new.cpp(9): warning C4101: “p”: 未引用的局部变量
+c:\users\12230\documents\vsc++\new\new\new.cpp(9): warning C4101: “q”: 未引用的局部变量
+  正在生成代码...
+  LINK : 没有找到 C:\Users\12230\Documents\vsc++\new\x64\Debug\new.exe 或上一个增量链接没有生成它；正在执行完全链接
+  new.vcxproj -> C:\Users\12230\Documents\vsc++\new\x64\Debug\new.exe
