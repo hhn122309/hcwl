@@ -1,0 +1,33 @@
+#include <iostream>
+using namespace std;
+
+int fun1(int x,int y)                 //函数1返回值传参
+{
+	return y/10+x/10*10+y%10*100+x%10*1000;
+}
+
+void fun2(int &x,int &y)              //函数2引用传参
+{
+	int c2;
+	c2=y/10+x/10*10+y%10*100+x%10*1000;
+	cout<<"引用传参合并之后的值："<<c2<<endl;
+}
+
+void fun3(int x,int y,int *c)         //函数3指针传参
+{
+   
+	*c=y/10+x/10*10+y%10*100+x%10*1000;
+}
+
+int main()                            //主函数
+{
+	int a,b,c1,c3;
+	cout<<"请输入两个两位整数a,b"<<endl;
+    cin>>a>>b;
+	c1=fun1(a,b);                      //调用函数1
+	cout<<"值传参合并之后的值：  "<<c1<<endl;
+	fun2(a,b);						   //调用函数2
+	fun3(a,b,&c3);					   //调用函数3
+	cout<<"指针传参合并之后的值："<<c3<<endl;
+	return 0;
+}
