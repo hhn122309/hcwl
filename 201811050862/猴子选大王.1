@@ -1,0 +1,30 @@
+#include <iostream>
+using namespace std;
+
+void main()
+{
+	int m,n,i,j,t;
+	int p[10];
+	cout<<"请输入m，n的值："<<endl;
+	cin>>m>>n;
+    
+    for (i=0; i<m; i++)      //初始化，数组中就是猴子编号
+        p[i]=i+1;
+    t=-1;                    //首次报数将从起始位置为0，即第1只猴子开始
+    
+	for (i=1; i<=m; i++)     //循环要执行m次，有m个猴子要out
+    {
+        j=1;                 // j用于报数
+        while(j<=n)  
+        {
+            t=(t+1)%m;       //数到最后一只猴子，折回编号1猴子。所以用%m
+            if (p[t]!=0) j++;//当猴子在圈中时，计数加一，否则继续循环
+        } 
+		if(i==m)             //判断是不是最后一只猴子
+		{
+			cout<<p[t]<<endl;//输出猴王的编号
+		}
+        p[t]=0;              //猴子出圈  		  
+    }
+}
+ 
